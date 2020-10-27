@@ -13,7 +13,7 @@ RUN apt update -qq && \
         libgbm-dev \
         llvm-dev \
         ninja-build \
-        python3-pip
+        python3-pip 
 
 RUN python3 -m pip install \
         mako \
