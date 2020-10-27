@@ -14,7 +14,6 @@ jobs:
         with:
           submodules: "recursive"
 
-
       - name: Run Meson
         working-directory: mesa
         run: |
@@ -31,8 +30,27 @@ jobs:
         working-directory: mesa
         run: ninja -C builddir install
 
-      - name: Upload Built Libs
-        uses: actions/upload-artifact@v2
+      - name: Zip Libs
+        run: zip -r -9 osmesa.zip /usr/local/lib/x86_64-linux-gnu
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: OSMesa
-          path: /usr/local/lib/x86_64-linux-gnu
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./osmesa.zip
+          asset_name: osmesa.zip
+          asset_content_type: application/zip
