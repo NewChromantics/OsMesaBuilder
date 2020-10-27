@@ -9,11 +9,19 @@ RUN apt update -qq && \
     add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     apt build-dep mesa -qq -y && \
     apt install -qq -y \
+        gcc-10 \
+        g++-10 \
+        npm \
+        libx264-dev \
+        libjavascriptcoregtk-4.0-dev \
+        kmscube \
         libgles2-mesa-dev \
         libgbm-dev \
+        libudev-dev \
         llvm-dev \
+        curl \
         ninja-build \
-        python3-pip 
+        python3-pip
 
 RUN python3 -m pip install \
         mako \
