@@ -40,7 +40,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: software-opengl
+          tag_name: Mesa 20.2.1
           release_name: Mesa 20.2.1
 
       - name: Upload Release Asset
