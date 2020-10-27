@@ -12,14 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: ls
-
-      - name: Move into mesa folder
-        run: cd mesa
-
-      - run: ls
-
       - name: Run Meson
+        working-directory: mesa
         run: |
           /usr/local/bin/meson builddir \
           -Dplatforms=drm \
@@ -30,6 +24,7 @@ jobs:
           -Dglx=disabled
 
       - name: Run Ninja
+        working-directory: mesa
         run: ninja -C builddir install
 
       - name: Upload Built Libs
