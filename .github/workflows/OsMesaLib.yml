@@ -11,10 +11,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
+
 
       - name: Run Meson
         working-directory: mesa
         run: |
+          ls
           /usr/local/bin/meson builddir \
           -Dplatforms=drm \
           -Dosmesa=gallium \
