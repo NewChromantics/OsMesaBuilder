@@ -5,16 +5,29 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ghcr.io/newchromantics/osmesa-env
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Move into mesa folder
+        run: cd mesa
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Run Meson
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          /usr/local/bin/meson builddir \
+          -Dplatforms=drm \
+          -Dosmesa=gallium \
+          -Dgallium-drivers=swrast \
+          -Ddri-drivers=[] \
+          -Dvulkan-drivers=[] \
+          -Dglx=disabled
+
+      - name: Run Ninja
+        run: ninja -C builddir install
+
+      - name: Upload Built Libs
+        uses: actions/upload-artifact@v2
+        with:
+          name: OSMesa
+          path: /usr/local/lib/x86_64-linux-gnu
