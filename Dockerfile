@@ -12,6 +12,7 @@ RUN apt update -qq && \
     apt build-dep mesa -qq -y && \
     apt install -qq -y \
         git \
+        zip \
         gcc-10 \
         g++-10 \
         npm \
