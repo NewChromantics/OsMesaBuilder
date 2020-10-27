@@ -31,7 +31,8 @@ jobs:
         run: ninja -C builddir install
 
       - name: Zip Libs
-        run: zip -r -9 osmesa.zip /usr/local/lib/x86_64-linux-gnu
+        working-directory: /usr/local/lib/
+        run: zip -r -9 osmesa.zip x86_64-linux-gnu
 
       - name: Create Release
         id: create_release
@@ -39,10 +40,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          release_name: Mesa 20.2.1
 
       - name: Upload Release Asset
         id: upload-release-asset 
@@ -51,6 +49,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./osmesa.zip
+          asset_path: /usr/local/lib/osmesa.zip
           asset_name: osmesa.zip
           asset_content_type: application/zip
