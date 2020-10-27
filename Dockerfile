@@ -6,7 +6,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update -qq && \
     apt install -qq -y software-properties-common && \
     add-apt-repository -s "deb http://archive.ubuntu.com/ubuntu/ bionic main restricted" && \
+    add-apt-repository ppa:git-core/ppa && \
     add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
+    apt update -qq && \
     apt build-dep mesa -qq -y && \
     apt install -qq -y \
         git \
