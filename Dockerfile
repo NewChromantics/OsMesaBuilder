@@ -21,7 +21,7 @@ RUN apt update -qq && \
         llvm-dev \
         curl \
         ninja-build \
-        python3-pip
+        python3-pip 
 
 RUN python3 -m pip install \
         mako \
