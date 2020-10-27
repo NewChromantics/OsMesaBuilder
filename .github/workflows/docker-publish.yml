@@ -11,34 +11,37 @@ env:
 jobs:
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
-  steps:
-    - uses: actions/checkout@v2
+  push:
+    runs-on: ubuntu-latest
 
-    - name: Build image
-      run: docker build . --file Dockerfile --tag $IMAGE_NAME
+    steps:
+      - uses: actions/checkout@v2
 
-    - name: Log into GitHub Container Registry
-    # A PAT with `read:packages` and `write:packages` scopes
-      run: echo "${{ secrets.REGISTRY_ACCESS }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
 
-    - name: Push image to GitHub Container Registry
-      run: |
-        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+      - name: Log into GitHub Container Registry
+      # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
+        run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
-        # Change all uppercase to lowercase
-        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+      - name: Push image to GitHub Container Registry
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
 
-        # Strip git ref prefix from version
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
-        # Strip "v" prefix from tag name
-        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
-        # Use Docker `latest` tag convention
-        [ "$VERSION" == "main" ] && VERSION=latest
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
-        echo IMAGE_ID=$IMAGE_ID
-        echo VERSION=$VERSION
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
 
-        docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-        docker push $IMAGE_ID:$VERSION
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
