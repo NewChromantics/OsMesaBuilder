@@ -5,7 +5,9 @@ on:
 
 jobs:
   build:
-    runs-on: ghcr.io/newchromantics/osmesa-env
+    runs-on: ubuntu:18.04
+    container:
+      image: ghcr.io/newchromantics/osmesa-env
 
     steps:
       - uses: actions/checkout@v2
