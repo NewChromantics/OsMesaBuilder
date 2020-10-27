@@ -9,6 +9,7 @@ RUN apt update -qq && \
     add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     apt build-dep mesa -qq -y && \
     apt install -qq -y \
+        git \
         gcc-10 \
         g++-10 \
         npm \
@@ -19,7 +20,6 @@ RUN apt update -qq && \
         libgbm-dev \
         libudev-dev \
         llvm-dev \
-        curl \
         ninja-build \
         python3-pip 
 
