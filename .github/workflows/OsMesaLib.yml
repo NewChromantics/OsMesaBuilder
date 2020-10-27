@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - run: ls
+
       - name: Move into mesa folder
         run: cd mesa
 
