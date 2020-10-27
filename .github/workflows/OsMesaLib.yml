@@ -17,6 +17,8 @@ jobs:
       - name: Move into mesa folder
         run: cd mesa
 
+      - run: ls
+
       - name: Run Meson
         run: |
           /usr/local/bin/meson builddir \
